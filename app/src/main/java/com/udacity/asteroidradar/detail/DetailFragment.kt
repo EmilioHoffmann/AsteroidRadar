@@ -22,7 +22,7 @@ class DetailFragment : Fragment() {
         _binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
-        val asteroid = DetailFragmentArgs.fromBundle(arguments!!).selectedAsteroid
+        val asteroid = DetailFragmentArgs.fromBundle(requireArguments()).selectedAsteroid
 
         binding.asteroid = asteroid
 
