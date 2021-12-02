@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="asteroidInfo"
+            type="com.udacity.asteroidradar.api.models.Asteroid" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/asteroid_background_color"
+        android:padding="@dimen/small_spacing">
+
+        <ImageView
+            android:id="@+id/hazardIndicatorImage"
+            android:layout_width="@dimen/hazard_indicator_size"
+            android:layout_height="@dimen/hazard_indicator_size"
+            android:layout_marginEnd="@dimen/small_spacing"
+            android:src="@{asteroidInfo.isPotentiallyHazardous() ? @drawable/ic_status_potentially_hazardous : @drawable/ic_status_normal}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_status_potentially_hazardous" />
+
+        <TextView
+            android:id="@+id/asteroidName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_spacing"
+            android:text="@{asteroidInfo.codename}"
+            android:textColor="@color/text_grey"
+            app:layout_constraintEnd_toStartOf="@id/hazardIndicatorImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="68347 (2001 KB67)" />
+
+        <TextView
+            android:id="@+id/approachDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            android:text="@{asteroidInfo.closeApproachDate}"
+            android:textColor="@color/text_grey"
+            app:layout_constraintEnd_toStartOf="@id/hazardIndicatorImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/asteroidName"
+            tools:text="2020-02-08" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:layout_marginHorizontal="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/normal_spacing"
+            android:background="@color/text_grey"
+            app:layout_constraintTop_toBottomOf="@id/approachDate" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

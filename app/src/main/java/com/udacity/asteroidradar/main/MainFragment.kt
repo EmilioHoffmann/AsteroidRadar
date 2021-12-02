@@ -20,6 +20,8 @@ class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by viewModel()
 
+    private lateinit var adapter: AsteroidsAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,6 +32,10 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
         viewModel.getAsteroids()
+        adapter = AsteroidsAdapter { asteroidId ->
+            println(asteroidId)
+        }
+        binding.asteroidRecycler.adapter = adapter
 
         setHasOptionsMenu(true)
         setObservers()
@@ -39,7 +45,7 @@ class MainFragment : Fragment() {
 
     private fun setObservers() {
         viewModel.asteroids.observe(viewLifecycleOwner) {
-            println(it)
+            adapter.submitList(it)
         }
     }
 
