@@ -32,8 +32,15 @@ class MainFragment : Fragment() {
         viewModel.getAsteroids()
 
         setHasOptionsMenu(true)
+        setObservers()
 
         return binding.root
+    }
+
+    private fun setObservers() {
+        viewModel.asteroids.observe(viewLifecycleOwner) {
+            println(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

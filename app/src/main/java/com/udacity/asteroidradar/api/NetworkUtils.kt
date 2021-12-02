@@ -12,7 +12,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 fun parseAsteroidsJsonResult(jsonResult: JsonObject): ArrayList<Asteroid> {
@@ -64,6 +66,9 @@ fun createNasaApiService(
         .retryOnConnectionFailure(true)
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authHeaderInterceptor)
+        .readTimeout(1, TimeUnit.MINUTES)
+        .writeTimeout(1, TimeUnit.MINUTES)
+        .connectTimeout(1, TimeUnit.MINUTES)
 
     val client = clientBuilder.build()
 

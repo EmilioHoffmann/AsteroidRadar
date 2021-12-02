@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar
 
 import android.app.Application
+import com.udacity.asteroidradar.di.databaseModule
 import com.udacity.asteroidradar.di.retrofitModule
 import com.udacity.asteroidradar.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -21,7 +22,8 @@ class AsteroidRadarApplication : Application(), KoinComponent {
             modules(
                 listOf(
                     retrofitModule,
-                    viewModelModule
+                    viewModelModule,
+                    databaseModule
                 )
             )
         }
