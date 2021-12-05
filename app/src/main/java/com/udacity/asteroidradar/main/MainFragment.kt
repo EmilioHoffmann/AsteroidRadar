@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,7 +34,7 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
         viewModel.getAsteroids()
         adapter = AsteroidsAdapter { asteroidId ->
-            println(asteroidId)
+            findNavController().navigate(MainFragmentDirections.toShowDetail(asteroidId))
         }
         binding.asteroidRecycler.adapter = adapter
 

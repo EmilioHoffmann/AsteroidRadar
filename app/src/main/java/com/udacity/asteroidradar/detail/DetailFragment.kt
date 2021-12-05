@@ -27,13 +27,19 @@ class DetailFragment : Fragment() {
 
         val asteroidId = DetailFragmentArgs.fromBundle(requireArguments()).selectedAsteroidId
 
-        binding.asteroid = viewModel.getAsteroid(asteroidId)
-
         binding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
         }
+        viewModel.getAsteroid(asteroidId)
+        setObservers()
 
         return binding.root
+    }
+
+    private fun setObservers() {
+        viewModel.asteroidData.observe(viewLifecycleOwner) {
+            binding.asteroid = it
+        }
     }
 
     private fun displayAstronomicalUnitExplanationDialog() {
