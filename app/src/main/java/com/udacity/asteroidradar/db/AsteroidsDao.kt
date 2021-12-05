@@ -22,6 +22,6 @@ interface AsteroidsDao {
     @Query("select * from asteroids_table where asteroid_id = :asteroidId LIMIT 1")
     fun getAsteroidById(asteroidId: String): Asteroid
 
-//    @Query("DELETE from asteroids_table where close_approach_date < :today")
-//    fun deleteOldAsteroids(today: Date)
+    @Query("DELETE from asteroids_table where close_approach_date < :today")
+    fun deleteOldAsteroids(today: Date)
 }

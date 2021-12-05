@@ -29,11 +29,11 @@
 
         <TextView
             android:id="@+id/asteroidName"
+            style="@style/titleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/small_spacing"
             android:text="@{asteroidInfo.codename}"
-            android:textColor="@color/text_grey"
             app:layout_constraintEnd_toStartOf="@id/hazardIndicatorImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -41,12 +41,12 @@
 
         <TextView
             android:id="@+id/approachDate"
+            style="@style/descriptionText"
+            dateText="@{asteroidInfo.closeApproachDate}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_spacing"
             android:layout_marginEnd="@dimen/small_spacing"
-            android:text="@{asteroidInfo.closeApproachDate}"
-            android:textColor="@color/text_grey"
             app:layout_constraintEnd_toStartOf="@id/hazardIndicatorImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/asteroidName"

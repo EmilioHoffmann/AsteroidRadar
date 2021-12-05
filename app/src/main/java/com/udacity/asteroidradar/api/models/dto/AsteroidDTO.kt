@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.api.models.dto
 
 import com.google.gson.annotations.SerializedName
 import com.udacity.asteroidradar.api.models.Asteroid
+import com.udacity.asteroidradar.utils.stringToDate
 
 data class AsteroidDTO(
     val id: String,
@@ -20,7 +21,7 @@ fun AsteroidDTO.toAsteroid(formattedDate: String): Asteroid {
     return Asteroid(
         id = id,
         codename = name,
-        closeApproachDate = formattedDate,
+        closeApproachDate = stringToDate(formattedDate),
         absoluteMagnitude = absoluteMagnitudeH,
         estimatedDiameter = estimatedDiameter?.kilometers?.estimatedDiameterMax,
         relativeVelocity = closeApproachData?.firstOrNull()?.relativeVelocity?.kilometersPerSecond,
