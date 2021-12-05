@@ -16,6 +16,15 @@ interface AsteroidsDao {
     @Query("select * from asteroids_table")
     fun getAllAsteroids(): LiveData<List<Asteroid>>
 
+    @Query("select * from asteroids_table where close_approach_date > :firstDayOfWeek")
+    fun getWeekAsteroids(firstDayOfWeek: Date): List<Asteroid>
+
+    @Query("select * from asteroids_table where close_approach_date = :today")
+    fun getTodayAsteroids(today: Date): List<Asteroid>
+
+    @Query("select * from asteroids_table")
+    fun getSavedAsteroids(): List<Asteroid>
+
     @Query("DELETE from asteroids_table")
     fun clear()
 

@@ -7,15 +7,16 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.api.models.Asteroid
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import com.udacity.asteroidradar.utils.loadImage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
-
     private var _binding: FragmentMainBinding? = null
     private val binding
         get() = _binding!!
@@ -33,7 +34,7 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.viewModel = viewModel
-        viewModel.getAsteroids()
+        viewModel.loadApiAsteroids()
         viewModel.getImageOfDay()
         adapter = AsteroidsAdapter { asteroidId ->
             findNavController().navigate(MainFragmentDirections.toShowDetail(asteroidId))
@@ -47,14 +48,27 @@ class MainFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.asteroids.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.allAsteroids.observe(viewLifecycleOwner) {
+            updateAdapterList(it)
         }
 
         viewModel.imageOfDayUrl.observe(viewLifecycleOwner) { pictureOfDay ->
             binding.imageOfDay.contentDescription = pictureOfDay.title
             pictureOfDay.url?.let { binding.imageOfDay.loadImage(it) }
         }
+
+        viewModel.asteroids.observe(viewLifecycleOwner) {
+            updateAdapterList(it)
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.loadingProgressBar.isVisible = it
+        }
+    }
+
+    private fun updateAdapterList(itemList: List<Asteroid>) {
+        binding.emptyListWarningContainer.isVisible = itemList.isEmpty()
+        adapter.submitList(itemList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,6 +77,18 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val filter: DatabaseFilter = when (item.itemId) {
+            R.id.showWeekAsteroids -> {
+                DatabaseFilter.WEEK
+            }
+            R.id.showTodayAsteroids -> {
+                DatabaseFilter.DAY
+            }
+            else -> {
+                DatabaseFilter.ALL
+            }
+        }
+        viewModel.loadDatabaseItems(filter)
         return true
     }
 

@@ -9,6 +9,12 @@ fun getToday(): Calendar {
     return Calendar.getInstance()
 }
 
+fun getWeekFirstDay(): Calendar {
+    val calendar = getToday()
+    calendar.add(Calendar.DATE, -7)
+    return calendar
+}
+
 fun dateToString(date: Date): String? {
     val sdf = SimpleDateFormat(API_DATE_PATTERN, Locale.US)
     return sdf.format(date)

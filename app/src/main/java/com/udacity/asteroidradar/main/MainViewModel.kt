@@ -8,8 +8,10 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.udacity.asteroidradar.api.NasaApiService
 import com.udacity.asteroidradar.api.models.Asteroid
 import com.udacity.asteroidradar.api.models.PictureOfDay
+import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.db.AsteroidsDao
 import com.udacity.asteroidradar.utils.getToday
+import com.udacity.asteroidradar.utils.getWeekFirstDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,27 +21,45 @@ class MainViewModel(
     private val database: AsteroidsDao
 ) : ViewModel() {
 
-    val asteroids: LiveData<List<Asteroid>>
+    val allAsteroids: LiveData<List<Asteroid>>
         get() = database.getAllAsteroids()
+
+    private val _asteroids = MutableLiveData<List<Asteroid>>()
+    val asteroids: LiveData<List<Asteroid>>
+        get() = _asteroids
 
     private val _imageOfDayUrl = MutableLiveData<PictureOfDay>()
     val imageOfDayUrl: LiveData<PictureOfDay>
         get() = _imageOfDayUrl
 
-    fun getAsteroids() {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    fun loadApiAsteroids() {
+        _isLoading.postValue(true)
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                database.deleteOldAsteroids(getToday().time)
+            when (val result = apiService.getAsteroids()) {
+                is NetworkResponse.Success -> {
+                    _isLoading.postValue(false)
+                    withContext(Dispatchers.IO) {
+                        database.insert(parseAsteroidsJsonResult(result.body))
+                    }
+                }
+                else -> {
+                    _isLoading.postValue(false)
+                }
             }
-//            when (val result = apiService.getAsteroids()) {
-//                is NetworkResponse.Success -> {
-//                    withContext(Dispatchers.IO) {
-//                        database.insert(parseAsteroidsJsonResult(result.body))
-//                    }
-//                }
-//                else -> { // TODO HANDLE ERROR
-//                }
-//            }
+        }
+    }
+
+    fun loadDatabaseItems(selectedFilter: DatabaseFilter = DatabaseFilter.WEEK) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (selectedFilter) {
+                DatabaseFilter.WEEK -> _asteroids.postValue(database.getWeekAsteroids(getWeekFirstDay().time))
+                DatabaseFilter.DAY -> _asteroids.postValue(database.getTodayAsteroids(getToday().time))
+                DatabaseFilter.ALL -> _asteroids.postValue(database.getSavedAsteroids())
+            }
         }
     }
 
@@ -51,7 +71,7 @@ class MainViewModel(
                         _imageOfDayUrl.postValue(result.body)
                     }
                 }
-                else -> { // Don't need to handle errors as a default image is used}
+                else -> { // Don't need to handle errors as a default image is used
                 }
             }
         }
