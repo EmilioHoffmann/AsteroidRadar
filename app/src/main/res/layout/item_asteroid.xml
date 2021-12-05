@@ -21,7 +21,7 @@
             android:layout_width="@dimen/hazard_indicator_size"
             android:layout_height="@dimen/hazard_indicator_size"
             android:layout_marginEnd="@dimen/small_spacing"
-            android:src="@{asteroidInfo.isPotentiallyHazardous() ? @drawable/ic_status_potentially_hazardous : @drawable/ic_status_normal}"
+            statusIcon="@{asteroidInfo.isPotentiallyHazardous()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

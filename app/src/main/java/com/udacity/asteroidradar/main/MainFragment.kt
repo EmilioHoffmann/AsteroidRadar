@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import com.udacity.asteroidradar.utils.loadImage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
@@ -33,6 +34,7 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
         viewModel.getAsteroids()
+        viewModel.getImageOfDay()
         adapter = AsteroidsAdapter { asteroidId ->
             findNavController().navigate(MainFragmentDirections.toShowDetail(asteroidId))
         }
@@ -47,6 +49,11 @@ class MainFragment : Fragment() {
     private fun setObservers() {
         viewModel.asteroids.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+
+        viewModel.imageOfDayUrl.observe(viewLifecycleOwner) { pictureOfDay ->
+            binding.imageOfDay.contentDescription = pictureOfDay.title
+            pictureOfDay.url?.let { binding.imageOfDay.loadImage(it) }
         }
     }
 
