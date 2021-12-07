@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.models.Asteroid
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
-import com.udacity.asteroidradar.utils.loadImage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
@@ -24,6 +24,7 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModel()
 
     private lateinit var adapter: AsteroidsAdapter
+    private val headerAdapter = HeaderAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +40,7 @@ class MainFragment : Fragment() {
         adapter = AsteroidsAdapter { asteroidId ->
             findNavController().navigate(MainFragmentDirections.toShowDetail(asteroidId))
         }
-        binding.asteroidRecycler.adapter = adapter
+        binding.asteroidRecycler.adapter = ConcatAdapter(headerAdapter, adapter)
 
         setHasOptionsMenu(true)
         setObservers()
@@ -53,8 +54,7 @@ class MainFragment : Fragment() {
         }
 
         viewModel.imageOfDayUrl.observe(viewLifecycleOwner) { pictureOfDay ->
-            binding.imageOfDay.contentDescription = pictureOfDay.title
-            pictureOfDay.url?.let { binding.imageOfDay.loadImage(it) }
+            headerAdapter.setList(pictureOfDay)
         }
 
         viewModel.asteroids.observe(viewLifecycleOwner) {
