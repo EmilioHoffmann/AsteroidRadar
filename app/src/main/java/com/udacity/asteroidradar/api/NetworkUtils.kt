@@ -25,14 +25,15 @@ fun parseAsteroidsJsonResult(jsonResult: JsonObject): ArrayList<Asteroid> {
     val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
     for (formattedDate in nextSevenDaysFormattedDates) {
         val dateAsteroidJsonArray = nearEarthObjectsJson.getAsJsonArray(formattedDate)
+        if (dateAsteroidJsonArray != null) {
+            for (i in 0 until dateAsteroidJsonArray.size()) {
+                val asteroidJson = dateAsteroidJsonArray.get(i)
 
-        for (i in 0 until dateAsteroidJsonArray.size()) {
-            val asteroidJson = dateAsteroidJsonArray.get(i)
+                val asteroidDto = Gson().fromJson(asteroidJson, AsteroidDTO::class.java)
 
-            val asteroidDto = Gson().fromJson(asteroidJson, AsteroidDTO::class.java)
-
-            val asteroid = asteroidDto.toAsteroid(formattedDate)
-            asteroidList.add(asteroid)
+                val asteroid = asteroidDto.toAsteroid(formattedDate)
+                asteroidList.add(asteroid)
+            }
         }
     }
 
