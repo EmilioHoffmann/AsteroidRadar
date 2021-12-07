@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.models.PictureOfDay
 import com.udacity.asteroidradar.databinding.ItemHeaderBinding
 import com.udacity.asteroidradar.utils.loadImage
@@ -14,7 +15,10 @@ class HeaderAdapter : RecyclerView.Adapter<HeaderAdapter.ImageOfDayViewHolder>()
         RecyclerView.ViewHolder(binding.root) {
         fun bind(pictureOfDay: PictureOfDay) {
             pictureOfDay.url?.let { binding.imageOfDay.loadImage(it) }
-            binding.imageOfDay.contentDescription = pictureOfDay.title
+            binding.imageOfDay.contentDescription = binding.root.context.getString(
+                R.string.nasa_picture_of_day_content_description_format,
+                pictureOfDay.title
+            )
             binding.executePendingBindings()
         }
     }
