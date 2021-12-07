@@ -12,8 +12,7 @@ This kind of app is one of the most usual in the real world, what you will learn
 
 ### Screenshots
 
-![Screenshot 1](https://user-images.githubusercontent.com/13904560/145113859-0be5404a-5680-4de1-9062-c5255cb36aad.png)
-![Screenshot 2](https://user-images.githubusercontent.com/13904560/145113880-79925763-4a5b-4449-9125-b6a9d1f2d9cb.png)
+<img src="https://user-images.githubusercontent.com/13904560/145113859-0be5404a-5680-4de1-9062-c5255cb36aad.png" width="400"> <img src="https://user-images.githubusercontent.com/13904560/145113880-79925763-4a5b-4449-9125-b6a9d1f2d9cb.png" width="400">
 
 ### Dependencies!
 
